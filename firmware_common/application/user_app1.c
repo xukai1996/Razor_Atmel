@@ -87,21 +87,8 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  LedOff(CYAN);
-  LedOff(GREEN);
-  LedOff(YELLOW);
-  LedOff(ORANGE);
-  
-  LedOn(BLUE);
-  LedOn(PURPLE);
-   
-  LedBlink(RED,LED_2HZ);
-  LedBlink(ORANGE,LED_4HZ);
-  LedBlink(YELLOW,LED_2HZ);
-  LedBlink(GREEN,LED_4HZ);
-  LedBlink(WHITE,LED_2HZ);
-  LedBlink(CYAN,LED_4HZ);
-  
+  HEARTBEAT_ON();
+  HEARTBEAT_OFF();
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -150,16 +137,24 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
- static u16 u16BlinkCount = 0;
-
-u16BlinkCount++;
-if(u16BlinkCount == 50)
-{
-  u16BlinkCount = 0;
-  LedToggle(PURPLE);
-}
-  
-  
+  static u32 u32Counter = 0;
+  static bool bIsLightOn = FALSE;
+   
+   u32Counter++;
+  if(u32Counter ==  COUNTER_PERIOD_MS)
+  {
+   u32Counter = 0;
+   if(bIsLightOn)
+   {
+   HEARTBEAT_OFF();
+    bIsLightOn = FALSE;
+  }
+  else
+  {
+  HEARTBEAT_ON();
+  bIsLightOn = TRUE;
+  }
+  }
 } /* end UserApp1SM_Idle() */
     
 
